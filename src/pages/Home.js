@@ -1,30 +1,35 @@
-import {useCountries} from '../contexts/CountriesContext';
-import { Link } from 'react-router-dom';
-import Country from '../components/Country';
+import {useState} from 'react';
+import useFetch from '../hooks/useFetch';
+import Filter from '../components/Filter';
+import { filter, search } from '../utils/functions';
+import Card from '../components/Card'
 
 const Home = () => {
+  const [query, setQuery] = useState("");
+  const [searchParam] = useState(["capital", "name"]);
+   
+  // const [filterParam, setFilterParam] = useState(["filter"]);
 
-  const {loading, filteredCountries, setShownCountries} = useCountries();
+
+  const {data, error, loading} = useFetch('https://restcountries.eu/rest/v2/all')
+
+  if (error) {
+        return <>{error.message}</>;
+    } else if (loading) {
+        return <>loading...</>;
+    } else {
 
   return (
-    <div>
-      {loading && <h3>Fetching data...</h3>}
-      {filteredCountries && filteredCountries.map(country => (
-          <Link
-              className="country-list__link"
-              to={`/${country.name}`}
-              key={country.numericCode}
-              onClick={() => {
-                setShownCountries(country)
-              }}>
-                <Country
-                key={country.numericCode}
-                country={country}
-              />
-              </Link>
-      ))}
+    <div className="container">
+      <Filter query={query} setQuery={setQuery} /*setFilterParam={setFilterParam} */ />
+      <div className="countries-container">
+          {filter(data, query, searchParam).map(country => (
+          <Card country={country} />
+        ))}  
+        </div>
     </div>
   )
+}
 }
 
 export default Home
