@@ -1,32 +1,17 @@
-/* eslint-disable array-callback-return */
-export const filter = (items, query, params) => {
-  return items.filter((item) => {
-    return params.some((newItem) => {
-      return ( item[newItem].toString().toLowerCase().indexOf(query.toLowerCase()) > -1);
-      });
-  });
+
+export const getBorderCountries = (names, code) => {
+  const countries = names.find(name => {
+    return name.alpha3Code === code;
+  })
+
+  return countries;
 }
 
-// export const search = (items, query, filterParam, searchParam) => {
-//    return items.filter((item) => {
-//        if (item.region === filterParam) {
-//            return searchParam.some((newItem) => {
-//              return (
-//                item[newItem]
-//                    .toString()
-//                    .toLowerCase()
-//                    .indexOf(query.toLowerCase()) > -1
-//                         );
-//                     });
-//                 } else{
-//                     return searchParam.some((newItem) => {
-//                         return (
-//                             item[newItem]
-//                                 .toString()
-//                                 .toLowerCase()
-//                                 .indexOf(query.toLowerCase()) > -1
-//                         );
-//                     });
-//                 }
-//             });
-// }
+
+export const filteredCountriesByName = (countries, name) => {
+  const filtered = countries.filter(country => {
+    return country.name === name;
+  })
+
+  return filtered[0]
+}
